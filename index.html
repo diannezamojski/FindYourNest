@@ -101,44 +101,72 @@
         </section>
     </div>
 
-    <script>
-        async function loadNests() {
-            try {
-                const response = await fetch('listings.json');
-                const nests = await response.json();
-                const grid = document.getElementById('listing-grid');
-                grid.innerHTML = '';
+   <script>
+    let allNests = []; // This stores the full database in memory
 
-                nests.forEach(nest => {
-                    const card = document.createElement('div');
-                    card.className = 'nest-card';
-                    card.innerHTML = `
-                        <div class="rating-box">RATING: ${nest.rating}/5</div>
-                        <h3>${nest.name}</h3>
-                        <div style="margin: 10px 0;">
-                            <span class="tag">${nest.type}</span>
-                            <span class="tag">Verified Resident</span>
-                        </div>
-                        <p style="font-style: italic; color: #444;">"${nest.review}"</p>
-                        <div style="font-size: 0.85rem; color: #888; margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px;">
-                            Price Point: ${nest.price}
-                        </div>
-                    `;
-                    grid.appendChild(card);
-                });
-            } catch (e) {
-                console.log("Error: Create listings.json in root to show data.");
-            }
+    // DEVELOPER ROLE: Fetch and store the data
+    async function loadNests() {
+        try {
+            const response = await fetch('listings.json');
+            allNests = await response.json();
+            displayNests(allNests); // Show everything initially
+        } catch (e) {
+            console.log("Error: Ensure listings.json is in your root folder.");
+            document.getElementById('listing-grid').innerHTML = "<p>Database connection pending...</p>";
+        }
+    }
+
+    // OPERATIONS ROLE: Display the cards based on a list
+    function displayNests(nestsToShow) {
+        const grid = document.getElementById('listing-grid');
+        grid.innerHTML = '';
+
+        if (nestsToShow.length === 0) {
+            grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">No matches found in Corvallis. Try a different search!</p>';
+            return;
         }
 
-        document.getElementById('nestForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const name = document.getElementById('formName').value;
-            alert("Thanks! Your rating for " + name + " has been submitted for verification.");
-            this.reset();
+        nestsToShow.forEach(nest => {
+            const card = document.createElement('div');
+            card.className = 'nest-card';
+            card.innerHTML = `
+                <div class="rating-box">RATING: ${nest.rating}/5</div>
+                <h3>${nest.name}</h3>
+                <div style="margin: 10px 0;">
+                    <span class="tag">${nest.type}</span>
+                    <span class="tag">Verified Resident</span>
+                </div>
+                <p style="font-style: italic; color: #444;">"${nest.review}"</p>
+                <div style="font-size: 0.85rem; color: #888; margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px;">
+                    Price Point: ${nest.price}
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    // MARKETING ROLE: Search Bar Logic (The "Searchable" part)
+    document.getElementById('searchInput').addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        
+        // Filter the database by name, type, or review content
+        const filtered = allNests.filter(nest => {
+            return nest.name.toLowerCase().includes(searchTerm) || 
+                   nest.type.toLowerCase().includes(searchTerm) ||
+                   nest.review.toLowerCase().includes(searchTerm);
         });
 
-        window.onload = loadNests;
-    </script>
+        displayNests(filtered);
+    });
+
+    window.onload = loadNests;
+
+    // Handle form submission (Mocking the backend)
+    document.getElementById('nestForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert("Success! Your rating has been submitted for verification.");
+        this.reset();
+    });
+</script>
 </body>
 </html>
