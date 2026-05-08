@@ -2,37 +2,112 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FindYourNest | OSU Student Housing</title>
     <style>
-        body { font-family: sans-serif; color: #333; line-height: 1.6; }
-        .hero { background: #D73F09; color: white; padding: 60px 20px; text-align: center; } /* OSU Orange */
-        .container { max-width: 800px; margin: auto; padding: 20px; }
-        .cta-button { background: #000; color: #fff; padding: 15px 25px; text-decoration: none; border-radius: 5px; }
+        :root {
+            --osu-orange: #D73F09; /* Official OSU Orange */
+            --nest-dark: #1A1A1A;
+            --nest-white: #FFFFFF;
+            --nest-gray: #F4F4F4;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: var(--nest-white);
+            color: var(--nest-dark);
+        }
+
+        /* Matches the Tablet Mockup in your graphic */
+        .hero {
+            background: linear-gradient(135deg, var(--osu-orange) 60%, #ff7b4d 100%);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+            border-bottom-right-radius: 80px; /* Stylized curve from your graphic */
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 30px auto;
+            opacity: 0.9;
+        }
+
+        .btn-main {
+            background-color: var(--nest-dark);
+            color: white;
+            padding: 15px 40px;
+            text-decoration: none;
+            border-radius: 50px; /* Rounded pill shape from mockup */
+            font-weight: bold;
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+
+        .btn-main:hover {
+            transform: scale(1.05);
+        }
+
+        .features {
+            display: flex;
+            justify-content: space-around;
+            padding: 50px 10%;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: var(--nest-gray);
+            padding: 25px;
+            border-radius: 20px;
+            width: 250px;
+            margin: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        .card h3 { color: var(--osu-orange); }
+
+        .tagline {
+            text-align: center;
+            font-style: italic;
+            color: #666;
+            margin-top: 40px;
+        }
     </style>
 </head>
 <body>
 
     <header class="hero">
         <h1>Your Future Starts Here</h1>
-        <p>Real reviews, verified listings—all in one place for OSU Students.</p>
-        <br><br>
-        <a href="#" class="cta-button">Join the Waitlist</a>
+        <p>Real reviews, verified listings, and the best dorm and apartment options—all in one place. Find your perfect place to rest, FindYourNest.</p>
+        <a href="#" class="btn-main">Get started</a>
     </header>
 
-    <div class="container">
-        <h2>The Year 1 Mission: Corvallis</h2>
-        <p>FindYourNest is tackling the housing crisis for 18-23 year olds at Oregon State University.</p>
-        
-        <h3>Why use FindYourNest?</h3>
-        <ul>
-            <li><strong>Student-Written Reviews:</strong> No more biased insights or hidden rental problems[cite: 4, 5].</li>
-            <li><strong>All Housing Types:</strong> Explore Dorms, Houses, Apartments, and Townhomes in Corvallis[cite: 2, 9].</li>
-            <li><strong>Student Verification:</strong> Secure login using your OSU student email[cite: 6].</li>
-        </ul>
-
-        <h3>Local Insights</h3>
-        <p>Benton County is seeing a decrease in students wanting to live on-campus, leading to a struggle for off-campus options. We are here to help you make well-informed decisions[cite: 7].</p>
+    <div class="tagline">
+        "Find your perfect place to rest with FindYourNest!" [cite: 18]
     </div>
+
+    <section class="features">
+        <div class="card">
+            <h3>Dorms & Apartments</h3>
+            <p>From the Quad to off-campus houses, see where OSU students actually stay. [cite: 20, 22]</p>
+        </div>
+        <div class="card">
+            <h3>Real Student Reviews</h3>
+            <p>Unbiased insights to help you avoid hidden rental problems. [cite: 28, 32]</p>
+        </div>
+        <div class="card">
+            <h3>Corvallis Focus</h3>
+            <p>Year 1 is all about Beaver Nation. Helping you navigate the local housing crisis. [cite: 63, 194]</p>
+        </div>
+    </section>
 
 </body>
 </html>
