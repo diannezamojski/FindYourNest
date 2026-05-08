@@ -1,1 +1,16 @@
-
+[
+  {
+    "name": "The Domain Corvallis",
+    "type": "Apartment",
+    "price": "$850 - $1,200",
+    "rating": 4.5,
+    "review": "Great amenities, but the package lockers get crowded."
+  },
+  {
+    "name": "The Retreat",
+    "type": "Apartment",
+    "price": "$900 - $1,350",
+    "rating": 4.2,
+    "review": "Awesome pool, but utility costs can be higher than expected."
+  }
+]
