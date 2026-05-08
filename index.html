@@ -19,7 +19,7 @@
         .filter-bar { background: var(--white); padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-top: -60px; display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 15px; }
         
         .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-top: 50px; }
-        .nest-card { border: 1px solid #eee; border-radius: 20px; overflow: hidden; transition: 0.3s; }
+        .nest-card { border: 1px solid #eee; border-radius: 20px; overflow: hidden; transition: 0.3s; background: white; }
         .nest-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
         .nest-content { padding: 20px; }
         
@@ -27,12 +27,12 @@
         
         select, input, button { padding: 12px; border-radius: 10px; border: 1px solid #ddd; }
         .btn-primary { background: var(--black); color: white; border: none; cursor: pointer; font-weight: 600; }
-        .btn-osu { background: var(--osu); color: white; border: none; cursor: pointer; font-weight: 600; padding: 15px 50px; border-radius: 50px; }
+        .btn-osu { background: var(--osu); color: white; border: none; cursor: pointer; font-weight: 600; padding: 15px 50px; border-radius: 50px; text-decoration: none; display: inline-block; }
     </style>
 </head>
 <body>
 
-<nav class="nav">
+    <nav class="nav">
         <div class="logo">FindYourNest</div>
         <div>OSU / Corvallis</div>
     </nav>
@@ -52,63 +52,48 @@
 
         <section>
             <h2>Verified Student Feedback</h2>
-            <div class="card-grid">
-                <div class="nest-card">
-                    <div class="nest-content">
-                        <span class="review-badge">Verified Resident</span>
-                        <h3>The Domain Corvallis</h3>
-                        <p>⭐ 4.5/5</p>
-                        <p>"Great amenities and close to campus, but the package lockers can be a bit crowded during move-in week."</p>
-                    </div>
-                </div>
-
-                <div class="nest-card">
-                    <div class="nest-content">
-                        <span class="review-badge">Verified Resident</span>
-                        <h3>Monroe Street Apartments</h3>
-                        <p>⭐ 3.2/5</p>
-                        <p>"Perfect location for getting to class in 5 mins, but it gets very loud on Friday nights."</p>
-                    </div>
-                </div>
+            <div id="listing-grid" class="card-grid">
+                <p>Loading the latest Corvallis nests...</p>
             </div>
         </section>
 
         <section style="margin-top: 80px; background: var(--gray); padding: 40px; border-radius: 30px; text-align: center;">
             <h2>Help the OSU Community</h2>
             <p>Your honest feedback helps the housing market become more transparent for everyone.</p>
-            <button class="btn-osu">Submit a Review (OSU Email Required)</button>
+            <a href="#" class="btn-osu">Submit a Review (OSU Email Required)</a>
         </section>
     </div>
 
-<script>
-    // This function acts as your "App Developer" role
-    async function loadListings() {
-        // 1. Fetch the data from your json file
-        const response = await fetch('listings.json');
-        const listings = await response.json();
-        
-        const grid = document.getElementById('listing-grid');
-        grid.innerHTML = ''; // Clear the "loading" text
+    <script>
+        async function loadListings() {
+            try {
+                // Fetches data from your listings.json file in the same repo
+                const response = await fetch('listings.json');
+                const listings = await response.json();
+                
+                const grid = document.getElementById('listing-grid');
+                grid.innerHTML = ''; 
 
-        // 2. Loop through each property to create a card
-        listings.forEach(item => {
-            const card = document.createElement('div');
-            card.className = 'nest-card';
-            card.innerHTML = `
-                <div class="nest-content">
-                    <span class="review-badge">Verified Resident</span>
-                    <h3>${item.name}</h3>
-                    <p><strong>${item.type}</strong> | ${item.price}</p>
-                    <p>⭐ ${item.rating}/5</p>
-                    <p>"${item.review}"</p>
-                </div>
-            `;
-            grid.appendChild(card);
-        });
-    }
-
-    // Run the function when the page loads
-    window.onload = loadListings;
-</script>
+                listings.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'nest-card';
+                    card.innerHTML = `
+                        <div class="nest-content">
+                            <span class="review-badge">Verified Resident</span>
+                            <h3>${item.name}</h3>
+                            <p><strong>${item.type}</strong> | ${item.price}</p>
+                            <p>⭐ ${item.rating}/5</p>
+                            <p>"${item.review}"</p>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Error loading listings:', error);
+                document.getElementById('listing-grid').innerHTML = '<p>Ensure listings.json is present in your repository.</p>';
+            }
+        }
+        window.onload = loadListings;
+    </script>
 </body>
-</html> 
+</html>
