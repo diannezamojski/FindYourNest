@@ -8,8 +8,7 @@
         :root { --osu: #D73F09; --black: #1A1A1A; --white: #FFFFFF; --gray: #F8F9FA; }
         body { font-family: 'Inter', system-ui, sans-serif; margin: 0; color: var(--black); line-height: 1.5; }
         
-        /* Branding header inspired by your pitch graphics */
-        .nav { padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; background: white; }
+        .nav { padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; background: white; border-bottom: 1px solid #eee; }
         .logo { font-weight: 800; font-size: 1.5rem; color: var(--osu); }
         
         .hero { background: var(--osu); color: white; padding: 100px 5%; text-align: center; border-radius: 0 0 100px 0; }
@@ -17,7 +16,6 @@
         
         .container { max-width: 1100px; margin: auto; padding: 40px 20px; }
         
-        /* Corvallis Filter System */
         .filter-bar { background: var(--white); padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-top: -60px; display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 15px; }
         
         .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-top: 50px; }
@@ -29,13 +27,14 @@
         
         select, input, button { padding: 12px; border-radius: 10px; border: 1px solid #ddd; }
         .btn-primary { background: var(--black); color: white; border: none; cursor: pointer; font-weight: 600; }
+        .btn-osu { background: var(--osu); color: white; border: none; cursor: pointer; font-weight: 600; padding: 15px 50px; border-radius: 50px; }
     </style>
 </head>
 <body>
 
     <nav class="nav">
         <div class="logo">FindYourNest</div>
-        <div><strong>Year 1:</strong> Corvallis/OSU Launch</div>
+        <div><strong>Year 1:</strong> OSU / Corvallis</div>
     </nav>
 
     <header class="hero">
@@ -45,7 +44,41 @@
 
     <div class="container">
         <div class="filter-bar">
-            <select><option>Neighborhood (Monroe, South C, etc)</option></select>
+            <select><option>Neighborhood</option><option>Monroe St</option><option>South Corvallis</option></select>
             <select><option>Dorm / Apt / House</option></select>
-            <input type="text" placeholder="Price Range">
-            <button class="btn-primary">Search
+            <input type="text" placeholder="Max Price">
+            <button class="btn-primary">Search Corvallis</button>
+        </div>
+
+        <section>
+            <h2>Verified Student Feedback</h2>
+            <div class="card-grid">
+                <div class="nest-card">
+                    <div class="nest-content">
+                        <span class="review-badge">Verified Resident</span>
+                        <h3>The Domain Corvallis</h3>
+                        <p>⭐ 4.5/5</p>
+                        <p>"Great amenities and close to campus, but the package lockers can be a bit crowded during move-in week."</p>
+                    </div>
+                </div>
+
+                <div class="nest-card">
+                    <div class="nest-content">
+                        <span class="review-badge">Verified Resident</span>
+                        <h3>Monroe Street Apartments</h3>
+                        <p>⭐ 3.2/5</p>
+                        <p>"Perfect location for getting to class in 5 mins, but it gets very loud on Friday nights."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section style="margin-top: 80px; background: var(--gray); padding: 40px; border-radius: 30px; text-align: center;">
+            <h2>Help the OSU Community</h2>
+            <p>Your honest feedback helps the housing market become more transparent for everyone.</p>
+            <button class="btn-osu">Submit a Review (OSU Email Required)</button>
+        </section>
+    </div>
+
+</body>
+</html>
