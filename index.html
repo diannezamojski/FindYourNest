@@ -80,5 +80,35 @@
         </section>
     </div>
 
+<script>
+    // This function acts as your "App Developer" role
+    async function loadListings() {
+        // 1. Fetch the data from your json file
+        const response = await fetch('listings.json');
+        const listings = await response.json();
+        
+        const grid = document.getElementById('listing-grid');
+        grid.innerHTML = ''; // Clear the "loading" text
+
+        // 2. Loop through each property to create a card
+        listings.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'nest-card';
+            card.innerHTML = `
+                <div class="nest-content">
+                    <span class="review-badge">Verified Resident</span>
+                    <h3>${item.name}</h3>
+                    <p><strong>${item.type}</strong> | ${item.price}</p>
+                    <p>⭐ ${item.rating}/5</p>
+                    <p>"${item.review}"</p>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    // Run the function when the page loads
+    window.onload = loadListings;
+</script>
 </body>
 </html> 
