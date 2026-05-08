@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FindYourNest | Rate My Apartment</title>
+    <title>FindYourNest | OSU Student Housing Ratings</title>
     
     <link rel="icon" type="image/png" href="favicon.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 
     <style>
-        :root { --osu: #D73F09; --black: #1A1A1A; --white: #FFFFFF; --gray: #F8F9FA; --success: #2E7D32; }
+        :root { --osu: #D73F09; --black: #1A1A1A; --white: #FFFFFF; --gray: #F8F9FA; }
         body { font-family: 'Inter', system-ui, sans-serif; margin: 0; color: var(--black); line-height: 1.5; background: #fff; }
         
         .nav { padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; background: white; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 100; }
@@ -22,17 +23,16 @@
         .nest-card { border: 2px solid #eee; border-radius: 15px; padding: 20px; transition: 0.3s; background: white; }
         .nest-card:hover { border-color: var(--osu); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
         
-        /* Updated Rating Box */
         .rating-box { display: inline-block; background: var(--black); color: white; padding: 5px 15px; border-radius: 8px; font-weight: bold; margin-bottom: 10px; }
         .tag { font-size: 0.75rem; background: #eee; padding: 3px 8px; border-radius: 4px; margin-right: 5px; font-weight: 600; }
 
-        .form-section { background: var(--gray); border-radius: 30px; padding: 40px; margin-top: 50px; }
+        .form-section { background: var(--gray); border-radius: 30px; padding: 40px; margin-top: 50px; border: 1px solid #ddd; }
         .form-group { margin-bottom: 15px; display: flex; flex-direction: column; }
         label { font-weight: 600; margin-bottom: 5px; }
         input, select, textarea { padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; }
         
         .btn-osu { background: var(--osu); color: white; border: none; cursor: pointer; font-weight: 700; padding: 15px 30px; border-radius: 50px; width: 100%; font-size: 1.1rem; }
-        .btn-osu:hover { background: #bf3908; }
+        .btn-osu:disabled { background: #ccc; cursor: not-allowed; }
     </style>
 </head>
 <body>
@@ -44,38 +44,38 @@
 
     <header class="hero">
         <h1>Real, Raw Student Reviews.</h1>
-        <p>Don't sign that lease until you know the truth from other OSU students.</p>
+        <p>Unbiased ratings for Corvallis rentals. Searchable. Transparent. Student-led.</p>
     </header>
 
     <div class="container">
         <div style="margin-top: -30px; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
-            <input type="text" id="searchInput" placeholder="Search by apartment name or management company..." style="width: 100%; box-sizing: border-box;">
+            <input type="text" id="searchInput" placeholder="Search by apartment name, neighborhood, or keywords (e.g. 'thin walls')..." style="width: 100%; box-sizing: border-box;">
         </div>
 
         <section style="margin-top: 40px;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h2>Latest Ratings</h2>
-                <span style="color: #666; font-size: 0.9rem;">Targeting 15,013 users</span>
+                <h2>Latest Student Ratings</h2>
+                <span id="counter" style="color: #666; font-size: 0.9rem;">Updating...</span>
             </div>
             <div id="listing-grid" class="card-grid">
-                <p>Fetching the latest student data...</p>
+                <p>Connecting to the Corvallis database...</p>
             </div>
         </section>
 
         <section class="form-section">
             <div style="text-align: center; margin-bottom: 30px;">
-                <h2>Submit a Review</h2>
-                <p>Help fix the inadequate housing info in Corvallis. 100% Anonymous.</p>
+                <h2>Submit an Anonymous Rating</h2>
+                <p>Your honest feedback helps the 18-23 student community avoid housing traps.</p>
             </div>
             <form id="nestForm">
                 <div class="form-group">
                     <label>Property Name</label>
-                    <input type="text" id="formName" placeholder="e.g. The Domain, The Retreat, Gem" required>
+                    <input type="text" id="formName" name="Name" placeholder="e.g. The Domain, The Retreat, Sierra" required>
                 </div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                     <div class="form-group">
                         <label>Overall Rating</label>
-                        <select id="formRating">
+                        <select id="formRating" name="Rating">
                             <option value="5">5 - Amazing</option>
                             <option value="4">4 - Good</option>
                             <option value="3">3 - Average</option>
@@ -85,7 +85,7 @@
                     </div>
                     <div class="form-group">
                         <label>Property Type</label>
-                        <select id="formType">
+                        <select id="formType" name="Type">
                             <option>Apartment</option>
                             <option>Dorm</option>
                             <option>House</option>
@@ -94,79 +94,104 @@
                 </div>
                 <div class="form-group">
                     <label>Your Honest Review</label>
-                    <textarea id="formReview" rows="4" placeholder="Thin walls? Fast maintenance? Hidden fees?" required></textarea>
+                    <textarea id="formReview" name="Review" rows="4" placeholder="Be specific: Maintenance speed, noise levels, management fairness..." required></textarea>
                 </div>
-                <button type="submit" class="btn-osu">Post Anonymous Review</button>
+                <input type="hidden" id="formPrice" name="Price" value="Not Specified">
+                
+                <button type="submit" id="submitBtn" class="btn-osu">Post Anonymous Rating</button>
             </form>
         </section>
     </div>
 
-   <script>
-    let allNests = []; // This stores the full database in memory
+    <script>
+        const API_URL = 'https://api.sheetbest.com/sheets/265f4c02-f990-4fb1-a5ba-e050a97c9627';
+        let allNests = [];
 
-    // DEVELOPER ROLE: Fetch and store the data
-    async function loadNests() {
-        try {
-            const response = await fetch('listings.json');
-            allNests = await response.json();
-            displayNests(allNests); // Show everything initially
-        } catch (e) {
-            console.log("Error: Ensure listings.json is in your root folder.");
-            document.getElementById('listing-grid').innerHTML = "<p>Database connection pending...</p>";
-        }
-    }
-
-    // OPERATIONS ROLE: Display the cards based on a list
-    function displayNests(nestsToShow) {
-        const grid = document.getElementById('listing-grid');
-        grid.innerHTML = '';
-
-        if (nestsToShow.length === 0) {
-            grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">No matches found in Corvallis. Try a different search!</p>';
-            return;
+        // DEVELOPER ROLE: Fetch Data from Google Sheets via SheetBest
+        async function loadData() {
+            try {
+                const response = await fetch(API_URL);
+                allNests = await response.json();
+                displayNests(allNests);
+                document.getElementById('counter').innerText = `${allNests.length} Verified Reviews`;
+            } catch (error) {
+                console.error("Data Fetch Error:", error);
+                document.getElementById('listing-grid').innerHTML = "<p>Database offline. Please check SheetBest connection.</p>";
+            }
         }
 
-        nestsToShow.forEach(nest => {
-            const card = document.createElement('div');
-            card.className = 'nest-card';
-            card.innerHTML = `
-                <div class="rating-box">RATING: ${nest.rating}/5</div>
-                <h3>${nest.name}</h3>
-                <div style="margin: 10px 0;">
-                    <span class="tag">${nest.type}</span>
-                    <span class="tag">Verified Resident</span>
-                </div>
-                <p style="font-style: italic; color: #444;">"${nest.review}"</p>
-                <div style="font-size: 0.85rem; color: #888; margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px;">
-                    Price Point: ${nest.price}
-                </div>
-            `;
-            grid.appendChild(card);
+        // OPERATIONS ROLE: Render Cards
+        function displayNests(data) {
+            const grid = document.getElementById('listing-grid');
+            grid.innerHTML = '';
+
+            if (data.length === 0) {
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">No matches found. Try another search.</p>';
+                return;
+            }
+
+            data.forEach(nest => {
+                const card = document.createElement('div');
+                card.className = 'nest-card';
+                card.innerHTML = `
+                    <div class="rating-box">RATING: ${nest.Rating}/5</div>
+                    <h3>${nest.Name}</h3>
+                    <div style="margin: 10px 0;">
+                        <span class="tag">${nest.Type}</span>
+                        <span class="tag">Verified Resident</span>
+                    </div>
+                    <p style="font-style: italic; color: #444;">"${nest.Review}"</p>
+                    <div style="font-size: 0.85rem; color: #888; margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px;">
+                        Price Point: ${nest.Price || 'Contact for info'}
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // MARKETING ROLE: Searchable Database Logic
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = allNests.filter(n => 
+                n.Name.toLowerCase().includes(term) || 
+                n.Review.toLowerCase().includes(term) ||
+                n.Type.toLowerCase().includes(term)
+            );
+            displayNests(filtered);
         });
-    }
 
-    // MARKETING ROLE: Search Bar Logic (The "Searchable" part)
-    document.getElementById('searchInput').addEventListener('input', function(e) {
-        const searchTerm = e.target.value.toLowerCase();
-        
-        // Filter the database by name, type, or review content
-        const filtered = allNests.filter(nest => {
-            return nest.name.toLowerCase().includes(searchTerm) || 
-                   nest.type.toLowerCase().includes(searchTerm) ||
-                   nest.review.toLowerCase().includes(searchTerm);
+        // OPERATIONS ROLE: Automated Form Submission
+        document.getElementById('nestForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.innerText = "Syncing with database...";
+
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: "POST",
+                    mode: "cors",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify([data]) // SheetBest requires an array
+                });
+
+                if (response.ok) {
+                    alert("Success! Your rating is now live in the database.");
+                    this.reset();
+                    loadData(); // Refresh the list automatically
+                }
+            } catch (error) {
+                alert("Submission failed. Check your internet or API limits.");
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Post Anonymous Rating";
+            }
         });
 
-        displayNests(filtered);
-    });
-
-    window.onload = loadNests;
-
-    // Handle form submission (Mocking the backend)
-    document.getElementById('nestForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        alert("Success! Your rating has been submitted for verification.");
-        this.reset();
-    });
-</script>
+        window.onload = loadData;
+    </script>
 </body>
 </html>
