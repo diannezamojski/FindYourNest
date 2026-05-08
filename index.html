@@ -3,111 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FindYourNest | OSU Student Housing</title>
+    <title>FindYourNest | Corvallis Housing Locator</title>
     <style>
-        :root {
-            --osu-orange: #D73F09; /* Official OSU Orange */
-            --nest-dark: #1A1A1A;
-            --nest-white: #FFFFFF;
-            --nest-gray: #F4F4F4;
-        }
+        :root { --osu-orange: #D73F09; --nest-dark: #1A1A1A; --nest-white: #FFFFFF; --nest-gray: #F4F4F4; }
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; margin: 0; background: var(--nest-white); color: var(--nest-dark); }
+        
+        .header { background: var(--osu-orange); color: white; padding: 40px 20px; text-align: center; border-radius: 0 0 50px 50px; }
+        .container { max-width: 1000px; margin: auto; padding: 20px; }
+        
+        /* Search Section */
+        .search-box { background: var(--nest-gray); padding: 20px; border-radius: 15px; margin: -30px auto 30px auto; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: flex; gap: 10px; justify-content: center; }
+        select, input, button { padding: 12px; border-radius: 8px; border: 1px solid #ddd; font-size: 1rem; }
+        .btn-search { background: var(--nest-dark); color: white; border: none; cursor: pointer; padding: 12px 30px; }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            background-color: var(--nest-white);
-            color: var(--nest-dark);
-        }
-
-        /* Matches the Tablet Mockup in your graphic */
-        .hero {
-            background: linear-gradient(135deg, var(--osu-orange) 60%, #ff7b4d 100%);
-            color: white;
-            padding: 80px 20px;
-            text-align: center;
-            border-bottom-right-radius: 80px; /* Stylized curve from your graphic */
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 10px;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 600px;
-            margin: 0 auto 30px auto;
-            opacity: 0.9;
-        }
-
-        .btn-main {
-            background-color: var(--nest-dark);
-            color: white;
-            padding: 15px 40px;
-            text-decoration: none;
-            border-radius: 50px; /* Rounded pill shape from mockup */
-            font-weight: bold;
-            display: inline-block;
-            transition: transform 0.2s;
-        }
-
-        .btn-main:hover {
-            transform: scale(1.05);
-        }
-
-        .features {
-            display: flex;
-            justify-content: space-around;
-            padding: 50px 10%;
-            flex-wrap: wrap;
-        }
-
-        .card {
-            background: var(--nest-gray);
-            padding: 25px;
-            border-radius: 20px;
-            width: 250px;
-            margin: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            text-align: center;
-        }
-
-        .card h3 { color: var(--osu-orange); }
-
-        .tagline {
-            text-align: center;
-            font-style: italic;
-            color: #666;
-            margin-top: 40px;
-        }
+        /* Review Form */
+        .review-form { background: #fff; border: 2px solid var(--osu-orange); padding: 25px; border-radius: 20px; margin-top: 40px; }
+        .review-form h2 { color: var(--osu-orange); margin-top: 0; }
+        textarea { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd; margin: 10px 0; height: 100px; box-sizing: border-box; }
+        
+        .listing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px; }
+        .listing-card { border: 1px solid #eee; border-radius: 12px; padding: 15px; background: #fff; }
+        .tag { background: #eee; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
-    <header class="hero">
-        <h1>Your Future Starts Here</h1>
-        <p>Real reviews, verified listings, and the best dorm and apartment options—all in one place. Find your perfect place to rest, FindYourNest.</p>
-        <a href="#" class="btn-main">Get started</a>
+    <header class="header">
+        <h1>FindYourNest Corvallis</h1>
+        <p>Verified Student Reviews for OSU Housing</p>
     </header>
 
-    <div class="tagline">
-        "Find your perfect place to rest with FindYourNest!" [cite: 18]
-    </div>
+    <div class="container">
+        <div class="search-box">
+            <select id="type">
+                <option>All Types</option>
+                <option>Dorm</option>
+                <option>Apartment</option>
+                <option>House</option>
+                <option>Townhome</option>
+            </select>
+            <input type="text" placeholder="Search near OSU campus (e.g. Monroe St)..." style="flex-grow: 1;">
+            <button class="btn-search">Find Nest</button>
+        </div>
 
-    <section class="features">
-        <div class="card">
-            <h3>Dorms & Apartments</h3>
-            <p>From the Quad to off-campus houses, see where OSU students actually stay. [cite: 20, 22]</p>
-        </div>
-        <div class="card">
-            <h3>Real Student Reviews</h3>
-            <p>Unbiased insights to help you avoid hidden rental problems. [cite: 28, 32]</p>
-        </div>
-        <div class="card">
-            <h3>Corvallis Focus</h3>
-            <p>Year 1 is all about Beaver Nation. Helping you navigate the local housing crisis. [cite: 63, 194]</p>
-        </div>
-    </section>
+        <section>
+            <h2>Popular in Corvallis</h2>
+            <div class="listing-grid">
+                <div class="listing-card">
+                    <span class="tag">Apartment</span>
+                    <h3>The Retreat</h3>
+                    <p>⭐ 4.2 (120 Student Reviews)</p>
+                    <p>Known for great amenities but high utility costs.</p>
+                </div>
+                <div class="listing-card">
+                    <span class="tag">Dorm</span>
+                    <h3>The Quad</h3>
+                    <p>⭐ 3.8 (85 Student Reviews)</p>
+                    <p>Central location, but rooms are smaller than average.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="review-form">
+            <h2>Submit a Real, Raw Review</h2>
+            <p>Help your fellow Beavers avoid hidden rental problems! [cite: 28]</p>
+            <form>
+                <input type="email" placeholder="Use @oregonstate.edu email for verification" style="width: 100%; margin-bottom: 10px;" required>
+                <input type="text" placeholder="Property Name (e.g. Domain Corvallis)" style="width: 100%; margin-bottom: 10px;">
+                <select style="width: 100%; margin-bottom: 10px;">
+                    <option>Select Rating (1-5 Stars)</option>
+                    <option>5 - Excellent</option>
+                    <option>1 - Avoid at all costs</option>
+                </select>
+                <textarea placeholder="Tell us about the management, hidden fees, or tour experiences... [cite: 29]"></textarea>
+                <button type="submit" class="btn-search" style="width: 100%; background: var(--osu-orange);">Post Review</button>
+            </form>
+        </section>
+    </div>
 
 </body>
 </html>
